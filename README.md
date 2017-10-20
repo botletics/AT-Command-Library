@@ -1,8 +1,7 @@
 # Arduino IDE AT Command Library
 
 ## Description
-This library is useful for projects in which commands are sent from a microcontroller to a module via UART.
-Such commands commonly include AT or ASCII commands.
+This library is useful for projects in which commands (like AT or ASCII commands) are sent from a microcontroller to a module via UART. This library supports software serial and hardware serial and can check for desired responses from the target module.
 
 ## Usage
 To install the library in Arduino IDE, follow the instructions below:

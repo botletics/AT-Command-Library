@@ -1,23 +1,26 @@
-/* This code is for blahhh
+/* This code is an example of how to use the AT command library to
+ *  send AT commands (or ASCII commands) to a module via UART (TX/RX)
+ *  using software or hardware serial. The commands can be set up to
+ *  check for a specified reply from the module as well as a timeout.
  *  
+ *  Author: Timothy Woo (botletics.com)
+ *  Last Modified: 10/20/2017
  */
  
 #include "ATcommands.h"
 #include <SoftwareSerial.h>
 
-#define MCU_TX 10 // Remember MCU TX connects to module RX and vice versa
-#define MCU_RX 9
+#define MCU_RX 9 // Remember MCU RX connects to module TX and vice versa
+#define MCU_TX 10
 #define RST 4 // MCU pin to control module reset
 
-SoftwareSerial moduleSS = SoftwareSerial(MCU_TX, MCU_RX); // Module RX, TX
+SoftwareSerial moduleSS = SoftwareSerial(MCU_RX, MCU_TX); // MCU RX, TX
 SoftwareSerial *moduleSerial = &moduleSS;
 
 // Hardware serial is also possible!
 // HardwareSerial *moduleSerial = &Serial1;
 
-ATcommands module = ATcommands(RST);
-
-//uint8_t readline(char *buff, uint8_t maxbuff, uint16_t timeout = 0);
+ATcommands module = ATcommands(RST, false); // Use "false" if you don't want AT commands with newline, "true" otherwise
 
 void setup() {
   Serial.begin(115200);
@@ -25,13 +28,21 @@ void setup() {
   moduleSerial->begin(9600); // Verify your module's baud rate
   module.begin(*moduleSerial);
 
-  module.reset(LOW, 10); // Reset module if needed. This example pulses the reset pin low for 10ms
+  // Reset module if needed. This example pulses the reset pin low for 10ms.
+  // If left out, the pulse duration is 100ms by default.
+  module.reset(LOW, 10); // module.reset(HIGH/LOW, pulseDuration)
 
-  // Execute a series of AT commands and print module responses
-  // The functions return a logic true/false to indicate if it was successful
-  // Use an if statement to check for this, or ignore it and omit the if statement
-  if (!sendCommand(F("AT"), ok_reply, 1000)) Serial.println("Command failed!");
-//  sendCommand(F("AT"), ok_reply, 1000); // Ignore if statement and just send the command without checking if successful
+  // Blindly send command without checking for reply or timeout
+  module.sendBlindCommand("AT");
+
+  // Send command with timeout but without checking for specific response. Will return false if no reply
+  if(!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!"));
+
+  // If you leave out the timeout value it defaults to 500ms
+  if(!module.sendCommand("AT")) Serial.println(F("Command failed!"));
+
+  // Send command with timeout and check if module's response matches the desired
+  if (!module.sendCommand("AT", "OK", 1000)) Serial.println(F("Command failed!"));
 }
 
 void loop() {

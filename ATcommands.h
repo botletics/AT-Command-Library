@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 #define default_pulse_ms 100
-#define default_timeout_ms 500
+#define default_timeout_ms 1000
 
 
 class ATcommands {

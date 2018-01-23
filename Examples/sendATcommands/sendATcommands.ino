@@ -37,11 +37,11 @@ void setup() {
   delay(1000); // May want to include a small delay depending on what module you're using
 
   // Send command with timeout but without checking for specific response. Will return false if no reply
-  if(!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT", 1000)) Serial.println(F("Command failed!"));
   delay(1000);
 
   // If you leave out the timeout value it defaults to 1000ms, which is usually good enough for most commands
-  if(!module.sendCommand("AT")) Serial.println(F("Command failed!"));
+  if (!module.sendCommand("AT")) Serial.println(F("Command failed!"));
   delay(1000);
 
   // Send command with timeout and check if module's response matches the desired

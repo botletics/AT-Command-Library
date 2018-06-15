@@ -61,7 +61,7 @@ bool ATcommands::sendCommand(char *command, char *reply, uint16_t timeout) {
   if (newline) mySerial->println(command);
   else mySerial->print(command);
 
-  uint16_t idx = 0;
+  uint8_t idx = 0;
   bool replyMatch = false;
   timer = millis();
 

@@ -9,7 +9,7 @@ ATcommands::ATcommands(int8_t rst, bool lineEnding) {
   newline = lineEnding;
 }
 
-ATcommands::begin(Stream &port) {
+void ATcommands::begin(Stream &port) {
   mySerial = &port;
 }
 

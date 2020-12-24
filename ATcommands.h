@@ -15,6 +15,7 @@ class ATcommands {
     bool sendBlindCommand(char *command);
     bool sendCommand(char *command, uint16_t timeout = default_timeout_ms);
     bool sendCommand(char *command, char *reply, uint16_t timeout = default_timeout_ms);
+    bool sendCommand(char *command, char *reply, bool startonly, uint16_t timeout = default_timeout_ms);
   
   private:
     int8_t _rst;

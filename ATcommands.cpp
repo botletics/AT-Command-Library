@@ -79,3 +79,32 @@ bool ATcommands::sendCommand(char *command, char *reply, uint16_t timeout) {
   if (replyMatch) return true;
   else return false;
 }
+
+bool ATcommands::sendCommand(char *command, char *reply, bool startonly, uint16_t timeout) {
+  while(mySerial->available()) mySerial->read(); // Clear input buffer
+
+  Serial.print(F("\t---> ")); Serial.println(command);
+  if (newline) mySerial->println(command);
+  else mySerial->print(command);
+
+  uint8_t idx = 0;
+  bool replyMatch = false;
+  timer = millis();
+
+  while (!replyMatch && millis() - timer < timeout) {
+  	if (mySerial->available()) {
+  	  replybuffer[idx] = mySerial->read();
+  	  idx++;
+      if (startonly) {
+        if (strcmp(replybuffer, reply) == 0) replyMatch = true;
+      } else {
+        if (strstr(replybuffer, reply) != NULL) replyMatch = true;
+      }
+  	}
+  }
+
+  Serial.print(F("\t<--- ")); Serial.println(replybuffer);
+
+  if (replyMatch) return true;
+  else return false;
+}

@@ -44,8 +44,14 @@ void setup() {
   if (!module.sendCommand("AT")) Serial.println(F("Command failed!"));
   delay(1000);
 
-  // Send command with timeout and check if module's response matches the desired
+  // Send command with timeout and check if module's response contains the desired (check the start)
   if (!module.sendCommand("AT", "OK", 1000)) Serial.println(F("Command failed!"));
+
+  // Send command with timeout and check if module's response start with the desired
+  if (!module.sendCommand("AT", "OK", true, 1000)) Serial.println(F("Command failed!"));
+
+  // Send command with timeout and check if module's response contains the desired
+  if (!module.sendCommand("AT", "OK", false, 1000)) Serial.println(F("Command failed!"));
 }
 
 void loop() {
